@@ -1,0 +1,773 @@
+type AcademicCalendarEvent {
+  begin: String!
+  end: String
+  hasHours: Boolean!
+  id: String!
+  name: MultiLanguageString!
+}
+
+type AcademicCalendarResponse {
+  available: Boolean!
+  semesters: [AcademicSemester!]!
+  stale: Boolean!
+  updatedAt: String
+}
+
+type AcademicSemester {
+  events: [AcademicCalendarEvent!]!
+  key: String!
+  name: MultiLanguageString!
+}
+
+type AccountSyncConflict {
+  entityId: ID!
+  kind: String!
+  revision: Int!
+}
+
+input AccountSyncOperationInput {
+  baseRevision: Int!
+  deleted: Boolean!
+  entityId: ID!
+  kind: String!
+  operationId: ID!
+  payloadJson: String!
+}
+
+"""
+Private, account-scoped sync record. Payload is JSON; transport requires a verified session.
+"""
+type AccountSyncRecord {
+  deleted: Boolean!
+  entityId: ID!
+  kind: String!
+  payloadJson: String!
+  revision: Int!
+}
+
+type AccountSyncResult {
+  conflicts: [AccountSyncConflict!]!
+  records: [AccountSyncRecord!]!
+}
+
+type AccountSyncSnapshot {
+  records: [AccountSyncRecord!]!
+}
+
+"""Announcement data to display on top of the apps dashboard"""
+type Announcement {
+  """Creation date of the announcement"""
+  createdAt: DateTime!
+
+  """Description of the announcement in different languages"""
+  description: MultiLanguageString!
+
+  """End date and time when the announcement is displayed"""
+  endDateTime: DateTime!
+
+  """Unique identifier of the announcement"""
+  id: ID!
+
+  """Image URL for the announcement"""
+  imageUrl: String
+
+  """Platform where the announcement is displayed"""
+  platform: [Platform!]!
+
+  """Priority of the announcement, higher are more important"""
+  priority: Int!
+
+  """Start date and time when the announcement is displayed"""
+  startDateTime: DateTime!
+
+  """Title of the announcement in different languages"""
+  title: MultiLanguageString!
+
+  """Last update date of the announcement"""
+  updatedAt: DateTime!
+
+  """URL to the announcement"""
+  url: String
+
+  """UserKind to target the announcement to specific user groups"""
+  userKind: [UserKind!]!
+}
+
+"""Input type for the announcement."""
+input AnnouncementInput {
+  """Description of the announcement in different languages"""
+  description: MultiLanguageStringInput!
+
+  """End date and time when the announcement is displayed"""
+  endDateTime: DateTime!
+
+  """Image URL for the announcement"""
+  imageUrl: String
+
+  """Platform where the announcement is displayed"""
+  platform: [Platform!]!
+
+  """Priority of the announcement, higher are more important"""
+  priority: Int!
+
+  """Start date and time when the announcement is displayed"""
+  startDateTime: DateTime!
+
+  """Title of the announcement in different languages"""
+  title: MultiLanguageStringInput!
+
+  """URL to the announcement"""
+  url: String
+
+  """UserKind to target the announcement to specific user groups"""
+  userKind: [UserKind!]!
+}
+
+"""Entry of the audit log for data mutations."""
+type AuditLogEntry {
+  """Creation date and time of the audit log entry"""
+  createdAt: DateTime!
+
+  """Entity of the audit log entry"""
+  entity: String!
+
+  """Entity ID of the audit log entry"""
+  entityId: Int
+
+  """Unique identifier of the audit log entry"""
+  id: ID!
+
+  """Name of the user who made the mutation"""
+  name: String
+
+  """Operation of the audit log entry"""
+  operation: String!
+
+  """User ID of the user who made the mutation"""
+  userId: String
+}
+
+type CampusLifePublicEvent {
+  description: MultiLanguageString!
+  endDateTime: String
+  eventUrl: String
+  id: Int!
+  location: String
+  organizerId: Int!
+  organizerName: String!
+  startDateTime: String!
+  title: MultiLanguageString!
+}
+
+type CampusLifePublicFeed {
+  available: Boolean!
+  events: [CampusLifePublicEvent!]!
+  organizers: [CampusLifePublicOrganizer!]!
+}
+
+type CampusLifePublicOrganizer {
+  description: MultiLanguageString!
+  id: Int!
+  instagram: String
+  linkedin: String
+  location: String
+  name: String!
+  nonProfit: Boolean
+  registrationNumber: String
+  website: String
+}
+
+"""
+Career Service Event data type. Information about a specific event from the career service.
+"""
+type CareerServiceEvent {
+  """Available slots for the event"""
+  availableSlots: Int @deprecated(reason: "This field is no longer available. Career service events are now sourced from Handshake RSS feed which doesn't provide slot information.")
+
+  """Date of the event"""
+  date: DateTime!
+
+  """Description of the event"""
+  description: String!
+
+  """Unique identifier of the event"""
+  id: ID!
+
+  """Maximum waiting list for the event"""
+  maxWaitingList: Int @deprecated(reason: "This field is no longer available. Career service events are now sourced from Handshake RSS feed which doesn't provide slot information.")
+
+  """Published date of the event"""
+  publishedDate: DateTime!
+
+  """Title of the event in German"""
+  title: String!
+
+  """Total slots for the event"""
+  totalSlots: Int @deprecated(reason: "This field is no longer available. Career service events are now sourced from Handshake RSS feed which doesn't provide slot information.")
+
+  """Unlimited slots for the event"""
+  unlimitedSlots: Boolean @deprecated(reason: "This field is no longer available. Career service events are now sourced from Handshake RSS feed which doesn't provide slot information.")
+
+  """URL for more information about the event"""
+  url: String!
+
+  """Waiting list for the event"""
+  waitingList: Int @deprecated(reason: "This field is no longer available. Career service events are now sourced from Handshake RSS feed which doesn't provide slot information.")
+}
+
+"""
+Campus Life Event data type. Information about a specific event on campus.
+"""
+type ClEvent {
+  """Begin of the event"""
+  begin: String @deprecated(reason: "Use start field instead with DateTime type")
+
+  """
+  Description of the event (only available if it's eligible for external sharing)
+  """
+  description: String @deprecated(reason: "Use descriptions field instead. This field will be removed in the future.")
+
+  """
+  Description of the event in different languages (only available if it's eligible for external sharing)
+  """
+  descriptions: MultiLanguageString
+
+  """End of the event"""
+  end: String @deprecated(reason: "Use end field instead with DateTime type")
+
+  """End of the event"""
+  endDateTime: DateTime
+
+  """URL to the event website"""
+  eventUrl: URL
+
+  """Host of the event"""
+  host: Host!
+
+  """Unique identifier of the event"""
+  id: ID!
+
+  """Boolean if the event is scraped from the moodle calendar or not."""
+  isMoodleEvent: Boolean
+
+  """
+  Location of the event (only available if it's eligible for external sharing)
+  """
+  location: String
+
+  """Organizer of the event"""
+  organizer: String! @deprecated(reason: "Use host field instead")
+
+  """Start of the event"""
+  startDateTime: DateTime
+
+  """Title of the event in German"""
+  title: String! @deprecated(reason: "Use titles field instead. This field will be removed in the future.")
+
+  """Title of the event in different languages"""
+  titles: MultiLanguageString!
+}
+
+"""
+When adding a new field, make sure to update the magidocs config file with relevant examples otherwise the documentation generation will fail.
+"""
+scalar DateTime
+
+scalar EmailAddress
+
+"""Provides a list of meals for a specific day"""
+type Food {
+  """List of meals"""
+  meals: [Meal!]
+
+  """Date of the meal list"""
+  timestamp: String!
+}
+
+"""Error message for the food query"""
+type FoodError {
+  """Location of the restaurant"""
+  location: String!
+
+  """Error message"""
+  message: String!
+}
+
+type FoodResponse {
+  available: Boolean!
+
+  """Error message for the food query"""
+  errors: [FoodError!]
+
+  """List of meal days"""
+  foodData: [Food!]
+  stale: Boolean!
+  translationFallback: Boolean!
+  updatedAt: String
+}
+
+type HawClub {
+  description: String!
+  id: ID!
+  links: [HawClubLink!]!
+  sourceUrl: String!
+  title: String!
+}
+
+type HawClubLink {
+  title: String!
+  url: String!
+}
+
+type HawClubsResponse {
+  available: Boolean!
+  clubs: [HawClub!]!
+  sourceUrl: String!
+  stale: Boolean!
+  updatedAt: String
+}
+
+type HawEvent {
+  date: String!
+  dateLabel: String!
+  endDate: String
+  endTime: String
+  id: String!
+  location: String
+  origin: String!
+  sourceUrl: String!
+  startTime: String
+  timeLabel: String
+  title: String!
+}
+
+type HawEventsResponse {
+  available: Boolean!
+  events: [HawEvent!]!
+  managedAvailable: Boolean!
+  sourceUrl: String!
+  stale: Boolean!
+  truncated: Boolean!
+  updatedAt: String
+}
+
+"""Host of the event, usually a club or student group."""
+type Host {
+  """Instagram URL of the event host"""
+  instagram: URL
+
+  """Name of the event host"""
+  name: String!
+
+  """URL to the event host website"""
+  website: URL
+}
+
+"""Input type for the host of an event."""
+input HostInput {
+  """Instagram URL of the event host"""
+  instagram: URL
+
+  """Name of the event host"""
+  name: String!
+
+  """URL to the event host website"""
+  website: URL
+}
+
+scalar LocalTime
+
+scalar LocationInput
+
+"""
+Input type for the manual campus life event. These events are created by the administrators and are not fetched from an external source.
+"""
+input ManualCampusLifeEventInput {
+  """Begin date and time of the event"""
+  begin: DateTime!
+
+  """Description of the event in different languages"""
+  description: MultiLanguageStringInput
+
+  """End date and time of the event"""
+  end: DateTime
+
+  """Host / organizer of the event"""
+  host: HostInput!
+
+  """Location of the event"""
+  location: String
+
+  """Title of the event in different languages"""
+  title: MultiLanguageStringInput!
+
+  """Website of the event"""
+  website: URL
+}
+
+"""Meal data"""
+type Meal {
+  additives: [String!]
+
+  """List of allergens (e.g. gluten, lactose, etc.)"""
+  allergens: [String]
+
+  """Category of the meal (main, soup or salad)"""
+  category: String!
+
+  """List of flags (e.g. vegan, vegetarian, etc.)"""
+  flags: [String]
+
+  """Unique identifier of the meal on the specific day"""
+  id: ID!
+
+  """Unique identifier of the meal, independent of the day"""
+  mealId: ID!
+
+  """Name of the meal in different languages"""
+  name: MultiLanguageString!
+
+  """Nutritional values for the meal"""
+  nutrition: Nutrition
+
+  """Original language of the meal name"""
+  originalLanguage: OriginalLanguage!
+
+  """Prices for different types of customers (student, employee, guest)"""
+  prices: Prices!
+
+  """
+  Restaurant where the meal is available (BerlinerTorMensa, BergedorfMensa, FinkenauMensa)
+  """
+  restaurant: String!
+
+  """
+  Static meals are always available, non-static meals are only available on specific days
+  """
+  static: Boolean!
+
+  """Variants or toppings of the meal, like bread, sauce, etc."""
+  variants: [Variation!]
+}
+
+"""String in multiple languages (German and English)"""
+type MultiLanguageString {
+  """German language code"""
+  de: String
+
+  """English language code"""
+  en: String
+}
+
+"""Input type for the multi language string."""
+input MultiLanguageStringInput {
+  de: String!
+  en: String!
+}
+
+"""Mutation type to update data."""
+type Mutation {
+  accountSync(operations: [AccountSyncOperationInput!]!): AccountSyncResult!
+
+  """Create a new room report."""
+  createRoomReport(input: RoomReportInput!): UpsertResponse
+
+  """
+  Delete an announcement by ID. Note: This mutation is only available for authenticated users.
+  """
+  deleteAppAnnouncement(id: ID!): Boolean
+
+  """
+  Delete a manual campus life event by ID. Note: This mutation is only available for authenticated users.
+  """
+  deleteManualClEvent(id: ID!): Boolean
+
+  """
+  Resolve a room report by ID. Note: This mutation is only available for authenticated users.
+  """
+  resolveRoomReport(id: ID!, resolved: Boolean): UpsertResponse
+
+  """
+  Create or update an announcement. If an ID is provided, the announcement is updated, otherwise a new announcement is created. Note: This mutation is only available for authenticated users.
+  """
+  upsertAppAnnouncement(id: ID, input: AnnouncementInput!): UpsertResponse
+
+  """
+  Create or update a manual campus life event. Note: This mutation is only available for authenticated users.
+  """
+  upsertManualClEvent(id: ID, input: ManualCampusLifeEventInput!): UpsertResponse
+}
+
+"""
+Nutritional values for a meal. Currently only available at Mensa. Values are per average portion.
+"""
+type Nutrition {
+  """Carbohydrates in grams"""
+  carbs: Float!
+
+  """Fat in grams"""
+  fat: Float!
+
+  """Saturated fat in grams"""
+  fatSaturated: Float!
+
+  """Fiber in grams"""
+  fiber: Float!
+
+  """Energy in kilocalories"""
+  kcal: Float!
+
+  """Energy in kilojoules"""
+  kj: Float!
+
+  """Protein in grams"""
+  protein: Float!
+
+  """Salt in grams"""
+  salt: Float!
+
+  """Sugar in grams"""
+  sugar: Float!
+}
+
+"""Enum representing the original language of a meal."""
+enum OriginalLanguage {
+  """German language code"""
+  de
+
+  """English language code"""
+  en
+}
+
+"""Parent meal for a variant meal"""
+type Parent {
+  """Category of the parent meal (main, soup or salad)"""
+  category: String!
+
+  """Unique identifier of the parent meal"""
+  id: ID!
+
+  """Name of the parent meal in different languages"""
+  name: MultiLanguageString!
+}
+
+"""
+Enum representing the platform of the user. This is used to target announcements to specific user groups.
+"""
+enum Platform {
+  """Android"""
+  ANDROID
+
+  """iOS"""
+  IOS
+
+  """Web"""
+  WEB
+
+  """Web Development Version"""
+  WEB_DEV
+}
+
+"""Prices for different types of customers"""
+type Prices {
+  """Price for employees"""
+  employee: Float
+
+  """Price for guests"""
+  guest: Float
+
+  """Price for students"""
+  student: Float
+}
+
+"""Root query"""
+type Query {
+  academicCalendar: AcademicCalendarResponse!
+  accountSnapshot: AccountSyncSnapshot!
+
+  """Get the current announcements"""
+  announcements: [Announcement!]! @deprecated(reason: "Use appAnnouncements query instead")
+
+  """Get the current in app announcements."""
+  appAnnouncements(active: Boolean): [Announcement!]!
+
+  """
+  Get the audit log entries. Note: This query is only available for authenticated admin users.
+  """
+  auditLog(limit: Int, offset: Int): [AuditLogEntry!]!
+  campusLifeEvents: CampusLifePublicFeed!
+
+  """Get all events of the career service."""
+  careerServiceEvents: [CareerServiceEvent!]! @deprecated(reason: "Use the replacement career service events API instead")
+
+  """Get all campus life clubs"""
+  clClubs: [Host!]! @deprecated(reason: "Use Campus Life API instead")
+
+  """Get the campus life events"""
+  clEvents: [ClEvent!]! @deprecated(reason: "Use Campus Life API instead")
+
+  """Get the meal plan for a specific restaurant."""
+  food(language: String = "de", locations: [LocationInput!]!): FoodResponse!
+  hawClubs(language: String = "de"): HawClubsResponse!
+  hawEvents(language: String = "de"): HawEventsResponse!
+
+  """
+  Get the room reports. Note: This query is only available for authenticated users.
+  """
+  roomReports: [RoomReport!]!
+
+  """Get all events of the Student Counselling Office."""
+  studentCounsellingEvents: [StudentCounsellingEvent!]! @deprecated(reason: "Use the replacement student counselling events API instead")
+}
+
+"""
+Enum representing the different restaurant locations. This is used as a parameter for the food query.
+"""
+enum RestaurantLocation {
+  BergedorfMensa
+  BerlinerTorMensa
+  FinkenauMensa
+}
+
+"""Get all room reports. Contains user reports of wrong room data."""
+type RoomReport {
+  """Creation date of the report"""
+  createdAt: DateTime!
+
+  """description of the report"""
+  description: String
+
+  """Unique identifier of the report"""
+  id: ID!
+
+  """Reason for the report. This is a enum wiht report categories."""
+  reason: RoomReportCategory!
+
+  """Resolved date of the report or null if not resolved"""
+  resolvedAt: DateTime
+
+  """Room name"""
+  room: String!
+}
+
+"""
+Enum representing the different room report categories. This is used to categorize the reason for the report.
+"""
+enum RoomReportCategory {
+  MISSING
+  NOT_EXISTING
+  OTHER
+  WRONG_DESCRIPTION
+  WRONG_LOCATION
+}
+
+"""
+Room report input type. Used to create a new report about incorrect room data.
+"""
+input RoomReportInput {
+  """description of the report"""
+  description: String
+
+  """Reason for the report."""
+  reason: RoomReportCategory!
+
+  """Room name"""
+  room: String!
+}
+
+"""
+Information about a specific event from the student Counselling Office.
+"""
+type StudentCounsellingEvent {
+  """Available slots for the event"""
+  availableSlots: Int
+
+  """Date of the event"""
+  date: DateTime!
+
+  """Unique identifier of the event"""
+  id: ID!
+
+  """Maximum waiting list for the event"""
+  maxWaitingList: Int
+
+  """Title of the event in German"""
+  title: String!
+
+  """Total slots for the event"""
+  totalSlots: Int
+
+  """Unlimited slots for the event"""
+  unlimitedSlots: Boolean!
+
+  """URL for more information about the event"""
+  url: String
+
+  """Waiting list for the event"""
+  waitingList: Int
+}
+
+scalar URL
+
+type UpsertResponse {
+  id: ID
+}
+
+"""
+Enum representing the kind of user. This is used to target announcements to specific user groups.
+"""
+enum UserKind {
+  """Employee"""
+  EMPLOYEE
+
+  """Guest"""
+  GUEST
+
+  """Student"""
+  STUDENT
+}
+
+"""Variants of a meal"""
+type Variation {
+  """
+  True if the variant is an additional topping and not a variant of the meal
+  """
+  additional: Boolean!
+
+  """List of allergens (e.g. gluten, lactose, etc.)"""
+  allergens: [String]
+
+  """List of flags (e.g. vegan, vegetarian, etc.)"""
+  flags: [String]
+
+  """Unique identifier of the variant"""
+  id: ID!
+
+  """Unique identifier of the meal, independent of the day"""
+  mealId: ID!
+
+  """Name of the variant in different languages"""
+  name: MultiLanguageString!
+
+  """Nutritional values for the variant"""
+  nutrition: Nutrition
+
+  """Original language of the variant name"""
+  originalLanguage: OriginalLanguage!
+
+  """Parent meal for a variant meal"""
+  parent: Parent
+
+  """Prices for different types of customers (student, employee, guest)"""
+  prices: Prices!
+
+  """
+  Restaurant where the variant is available (BerlinerTorMensa, BergedorfMensa, FinkenauMensa)
+  """
+  restaurant: String
+
+  """
+  Static variants are always available, non-static variants are only available on specific days
+  """
+  static: Boolean!
+}

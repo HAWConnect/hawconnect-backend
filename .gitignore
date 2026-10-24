@@ -1,0 +1,86 @@
+.env.local
+.VSCodeCounter
+node_modules
+.DS_Store
+src/data/announcements.json
+src/data/cl-events.json
+database/
+docs/out/
+
+# Local configuration, caches and verification exports
+.env
+.env.*
+!.env.example
+!.env.local.example
+.cache/
+/dist-*/
+*.log
+
+# Publication safety: private runtime configuration (commit sanitised examples only)
+.env
+.env.*
+!.env.example
+!.env.local.example
+.envrc
+.private/
+secrets/
+credentials/
+credentials.json
+service-account*.json
+*service-account-key*.json
+
+# Signing material and private keys
+*.pem
+*.key
+*.p8
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.mobileprovision
+*.provisionprofile
+id_rsa
+id_ed25519
+
+# Dependency caches and generated artifacts
+node_modules/
+.pnpm-store/
+.npm/
+.bun/
+.cache/
+coverage/
+playwright-report/
+test-results/
+*.log
+*.tsbuildinfo
+*.apk
+*.aab
+*.ipa
+*.app/
+*.xcarchive/
+*.dSYM/
+*.zip
+
+# Local exports, private imports and database backups
+/dist/
+/dist-*/
+/outputs/
+/backups/
+/database-dumps/
+/private-imports/
+*.dump
+*.backup
+*.sql.gz
+/*.ics
+/*.ical
+
+# Local development provenance and historical design material (not publication inputs)
+/docs/upstream/
+/docs/superpowers/
+/.agents/
+/config/github/architecture.svg
+
+# Publish only student-facing documentation; keep internal reports local
+/docs/*
+!/docs/README.md
+!/docs/students/

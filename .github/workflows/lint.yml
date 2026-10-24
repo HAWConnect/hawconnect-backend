@@ -1,0 +1,24 @@
+name: CI
+on:
+    push:
+        branches: [develop, main]
+    pull_request:
+        branches: [develop, main]
+jobs:
+    checks:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+        steps:
+            - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+            - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+              with:
+                  bun-version-file: .bun-version
+            - name: Install locked dependencies
+              run: bun install --frozen-lockfile --ignore-scripts
+            - name: Validate local schema generation
+              run: bun run codegen
+            - name: Run TypeScript and Biome
+              run: bun run lint
+            - name: Run tests
+              run: bun test
