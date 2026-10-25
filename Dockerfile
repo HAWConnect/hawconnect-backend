@@ -23,6 +23,9 @@ RUN bunx magidoc generate -f config/api-docs/magidoc.mjs
 
 # copy production dependencies and source code into final image
 FROM base AS release
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
 COPY --chown=bun:bun --from=install /temp/prod/node_modules node_modules
 COPY --from=prerelease /usr/src/app/docs/out docs/out
 COPY --from=prerelease /usr/src/app/index.ts .
@@ -33,7 +36,8 @@ COPY --from=prerelease /usr/src/app/startup.sh .
 RUN chmod +x startup.sh
 
 # The public source caches must be writable by the unprivileged application user.
-RUN mkdir -p /var/lib/hawconnect && chown bun:bun /var/lib/hawconnect
+RUN mkdir -p /var/lib/hawconnect /usr/src/app/.cache \
+    && chown bun:bun /var/lib/hawconnect /usr/src/app/.cache
 ENV HAWCONNECT_FOOD_SNAPSHOT_PATH=/var/lib/hawconnect/hamburg-food.json
 ENV HAWCONNECT_ACADEMIC_CALENDAR_PATH=/var/lib/hawconnect/academic-calendar.json
 ENV HAWCONNECT_EVENTS_SNAPSHOT_PATH=/var/lib/hawconnect/events.json
