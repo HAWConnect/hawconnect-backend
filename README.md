@@ -81,19 +81,19 @@ This is not an instruction to rerun the full sequence against an existing databa
 
 ## Deployment with Coolify
 
-Create a Dockerfile application using repository root, `/Dockerfile`, internal port **4000**, and the target domain `https://hawconnect-api.raju.app`. The target is not a claim of a live deployment.
+Create a Dockerfile application using repository root, `/Dockerfile`, internal port **4000**, and the target domain `https://api.hawconnect.de`. The target is not a claim of a live deployment.
 
 ```dotenv
 NODE_ENV=production
-HAWCONNECT_AUTH_ORIGIN=https://hawconnect-api.raju.app
-HAWCONNECT_WEB_ORIGIN=https://hawconnect.raju.app
-HAWCONNECT_WEB_ORIGINS=https://hawconnect.raju.app
-HAWCONNECT_DASH_ORIGIN=https://hawconnect-dash.raju.app
+HAWCONNECT_AUTH_ORIGIN=https://api.hawconnect.de
+HAWCONNECT_WEB_ORIGIN=https://hawconnect.de
+HAWCONNECT_WEB_ORIGINS=https://hawconnect.de
+HAWCONNECT_DASH_ORIGIN=https://dash.hawconnect.de
 ```
 
 Supply private configuration at runtime. Use a reachable PostgreSQL service and configured SMTP provider. Local environment files are not transferred to Coolify automatically.
 
-The Dockerfile runs as an unprivileged user and directs food, academic-calendar and event snapshots to `/var/lib/hawconnect`; mount persistent storage there. Clubs currently write to `/usr/src/app/.cache`, which also needs a writable directory and a persistent mount if its cache should survive replacement. The current Dockerfile does not explicitly provision that clubs-cache directory; prepare it with application-user ownership before deployment. Storage persistence is not a substitute for backups.
+The Dockerfile runs as an unprivileged user and directs food, academic-calendar and event snapshots to `/var/lib/hawconnect`; mount persistent storage there. Clubs write to `/usr/src/app/.cache`; mount persistent storage there as well. The Dockerfile prepares both directories with application-user ownership and includes curl for Coolify health checks. Storage persistence is not a substitute for backups.
 
 Food refresh defaults to thirty minutes with a five-minute minimum; academic dates refresh daily and official events hourly. Valid cached snapshots are retained after source failures. Container builds, production deployment and actual email delivery have not been verified.
 
