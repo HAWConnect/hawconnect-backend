@@ -16,6 +16,7 @@ import { createAdminRouter } from './src/admin/router'
 import { createAdminRuntime } from './src/admin/runtime'
 import { createPublicLegalRouter } from './src/lib/legal-router'
 import { myHawCalendarRouter } from './src/lib/myhaw-calendar-router'
+import { createPublicQuickLinksRouter } from './src/lib/quick-links-router'
 import { resolvers } from './src/resolvers'
 import { startAcademicCalendarRefresh } from './src/utils/academic-calendar'
 import { startFoodRefresh } from './src/utils/food-refresh'
@@ -58,6 +59,10 @@ app.use(
 app.use('/api/admin', createAdminRouter(createAdminRuntime()))
 
 app.use('/api/calendar/myhaw', myHawCalendarRouter)
+app.use(
+    '/api/quick-links',
+    createPublicQuickLinksRouter(accountRuntime?.pool ?? null)
+)
 app.use('/api/legal', createPublicLegalRouter(accountRuntime?.pool ?? null))
 
 // Only our bounded, domain-restricted wrapper is public. Never expose raw /api/auth routes.

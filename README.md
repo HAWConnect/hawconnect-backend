@@ -5,7 +5,7 @@ Bun / Express / Apollo backend for the independent, student-maintained HAWConnec
 ## Services
 
 - Public GraphQL menus from Studierendenwerk Hamburg's official German and English pages, with current/next-week ingestion, declared labels, validation and cached snapshots.
-- Public HAW events, clubs and academic-date ingestion. The academic-date scraper currently uses international-office calendars; it is not verified coverage of all departments' semester dates.
+- Public HAW events and academic-date ingestion, plus dashboard-managed clubs. The academic-date scraper currently uses international-office calendars; it is not verified coverage of all departments' semester dates.
 - Restricted myHAW ICS downloads for browser imports, without university credentials.
 - Optional `@haw-hamburg.de` magic-link accounts and encrypted-at-rest account synchronisation. Encryption is server-managed, not end-to-end.
 - Dashboard API for announcements, Campus Life events, organizer profiles, permissions, audit history and bilingual legal publications.
@@ -69,6 +69,7 @@ bun run accounts:migrate
 bun run admin:migrate
 bun run organizers:migrate
 bun run legal:migrate
+bun run clubs:migrate
 ```
 
 This is not an instruction to rerun the full sequence against an existing database. Check migration history and existing schema first. Earlier local setup applied several migrations to the configured database; that does not establish the state of a different deployment database. Keep existing sync encryption keys when moving data and back them up separately.
@@ -93,7 +94,7 @@ HAWCONNECT_DASH_ORIGIN=https://dash.hawconnect.de
 
 Supply private configuration at runtime. Use a reachable PostgreSQL service and configured SMTP provider. Local environment files are not transferred to Coolify automatically.
 
-The Dockerfile runs as an unprivileged user and directs food, academic-calendar and event snapshots to `/var/lib/hawconnect`; mount persistent storage there. Clubs write to `/usr/src/app/.cache`; mount persistent storage there as well. The Dockerfile prepares both directories with application-user ownership and includes curl for Coolify health checks. Storage persistence is not a substitute for backups.
+The Dockerfile runs as an unprivileged user and directs food, academic-calendar and event snapshots to `/var/lib/hawconnect`; mount persistent storage there. Club content is stored in PostgreSQL, not in the old `.cache` volume. The Dockerfile includes curl for Coolify health checks. Storage persistence is not a substitute for backups.
 
 Food refresh defaults to thirty minutes with a five-minute minimum; academic dates refresh daily and official events hourly. Valid cached snapshots are retained after source failures. Container builds, production deployment and actual email delivery have not been verified.
 
@@ -135,3 +136,40 @@ For a genuinely empty database, first review the target and run `bun run migrate
 If that error occurs, stop and preserve a backup plus the existing journal/schema. A maintainer must review a separate adoption/upgrade procedure; do not drop tables, delete the journal, rerun old migrations or add baseline hashes manually. Recognised baseline reruns preserve existing rows and are supported.
 
 Isolated migration tests require `HAWCONNECT_MIGRATION_TEST_URL` pointing to a disposable loopback PostgreSQL database named `hawconnect_migration_test`. Run `bun test src/utils/tests/migration-baseline.test.ts src/utils/tests/migration-baseline-integration.test.ts`. The integration suite resets only its explicitly selected test schemas; never target valuable data.
+
+### Editable clubs
+
+The Ops-protected `/api/admin/clubs` endpoints manage the club directory, sanitized rich text, HTTPS image URLs and authored DE/EN translations. Clubs are database-only: no club scraping, source-page HTTP requests or scraper-cache reads occur. GraphQL `hawClubs` serves stored entries and plain descriptions for older clients. Translations fall back to available authored text without machine translation. Existing stored edited entries remain editable managed clubs under their original opaque IDs. New source overrides are rejected. Deleting a club removes all its translations. Saves/deletes require the returned version and commit an audit record in the same transaction.
+
+Club content lives in additive `haw_club_content` in the existing account PostgreSQL database through `accountRuntime.pool`; there is no dashboard database. After reviewing target ownership and obtaining deployment authorization, run `bun run clubs:migrate` explicitly. Server startup never runs this migration. Source metadata columns remain for compatibility with previously stored rows. No cached content is imported automatically. The reviewed offline initial-club snapshot can be copied once using the explicit import below. Use disposable local PostgreSQL for integration tests; apply the additive migration explicitly to each intended deployment database.
+
+A successful empty database directory is available and fresh. Missing optional account configuration or the club table produces an unavailable empty public directory; administrators receive `ClubsSetupRequired` when the table is missing. Temporary database failures retain the last managed directory in process memory and mark it stale. A cold process has no managed fallback and returns an unavailable empty directory. `updatedAt` is the newest stored club update time, or null for an empty list. Image bytes/uploads use the dashboard's authorized R2 workflow; this backend stores validated HTTPS image references only. The compatibility `sourceUrl` envelope field points to the HAWConnect clubs website; each club's `sourceUrl` remains its editable HTTPS website link.
+
+### Keep the existing clubs once
+
+`src/data/initial-clubs.json` contains the reviewed local snapshot of ten existing clubs with twenty explicitly paired DE/EN translations. The import reads this bundled file only; it never fetches a page or reads the old scraper cache. Validate it without database access first:
+
+```bash
+bun run clubs:import-existing
+```
+
+The default dry run prints counts only and does not initialize account configuration. After reviewing ownership of the configured account database and explicitly authorizing writes, apply the additive table/ledger migration and then import:
+
+```bash
+bun run clubs:migrate
+bun run clubs:import-existing --apply
+```
+
+The apply command uses the existing account pool. It sanitizes every translation, creates managed manual entries and audits inserts with the fixed local CLI actor label. Existing rows matching a seed editor ID or either reviewed locale/source ID cause that entire seed club to be kept untouched and reported in `keptClubs`. One transaction writes the entries, audit records and completion marker. Repeated or concurrent runs are no-ops after completion, including after an imported entry is edited or deleted. A failed transaction leaves no partial import or completion marker. PostgreSQL integration checks use an isolated local fixture. The import must be applied explicitly to each intended deployment database.
+
+### Rich legal pages
+
+Admin legal drafts and public published documents accept optional `bodyHtml: { de, en }` (or null) alongside the existing plain `body` and HTTPS `url` fields. Without HTML, plain text remains literal, including angle brackets. With HTML, the server allows text formatting and safe HTTPS/mailto links, removes images/scripts/styles/unsafe attributes, and derives the authoritative plain body for older clients. Each HTML language is limited to 20,000 characters. Internal publication requires meaningful text in both languages after sanitization; external publications expose only the active URLs and empty plain bodies, with no inactive HTML sidecar. Admin and public reads sanitize stored rich content and never expose unpublished draft content through the public endpoint.
+
+This optional JSON field needs no database migration. The existing admin-only permissions, draft/save/publish/withdraw actions, optimistic versions and audit transactions remain in place. Rich legal text does not use R2 images. Verification uses unit tests and the disposable local PostgreSQL fixture; no production legal content was written.
+
+## Managed Quick Links
+
+Run `bun run quick-links:migrate` explicitly against the configured account database before enabling Dash Quick Links. The additive migration creates `haw_quick_links` and seeds the existing ten links only when the directory has not been initialized. Re-running preserves edits and an intentionally empty directory. Startup does not migrate.
+
+Public clients read `GET /api/quick-links`. Ops/admin users read and save the ordered bilingual directory through `/api/admin/quick-links`; writes require the current version and are audited in the same transaction. Only allowlisted platform icon keys and HTTPS URLs without embedded credentials are accepted. Hiding or deleting a link removes it from the public directory. A successful save publishes immediately; the app refreshes on screen focus and foreground and retains its query cache on temporary failures. Before first successful managed response it uses the bundled starter directory.

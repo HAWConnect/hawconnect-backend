@@ -1,7 +1,9 @@
 import type { Pool, PoolClient } from 'pg'
+import { createClubsRepository } from './clubs'
 import { createLegalRepository } from './legal'
 import { createOrganizerRepository } from './organizers'
 import { adminEmail, type Capability, capabilitiesFor } from './policy'
+import { createQuickLinksRepository } from './quick-links'
 import type { ContentInput, ContentKind } from './validation'
 
 const tables = {
@@ -82,7 +84,9 @@ export function createAdminRepository(pool: Pool, bootstrap: string[]) {
     }
     return {
         organizers: createOrganizerRepository(pool),
+        quickLinks: createQuickLinksRepository(pool),
         legal: createLegalRepository(pool),
+        clubs: createClubsRepository(pool),
         async grants(email: string): Promise<Capability[]> {
             const address = adminEmail(email)
             if (bootstrap.includes(address)) return ['admin']

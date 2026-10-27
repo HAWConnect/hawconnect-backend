@@ -626,6 +626,8 @@ type HawClubLink {
     url: String!
 }
 type HawClub {
+    descriptionHtml: String
+    contentLanguage: String
     id: ID!
     title: String!
     description: String!

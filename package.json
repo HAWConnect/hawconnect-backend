@@ -18,7 +18,10 @@
         "fmt:unsafe": "biome check --fix --unsafe",
         "test": "bun test",
         "organizers:migrate": "bun run ./src/db/accounts/organizer-migrate.ts",
-        "legal:migrate": "bun run ./src/db/accounts/legal-migrate.ts"
+        "clubs:import-existing": "bun run ./src/db/accounts/clubs-import-existing.ts",
+        "clubs:migrate": "bun run ./src/db/accounts/clubs-migrate.ts",
+        "legal:migrate": "bun run ./src/db/accounts/legal-migrate.ts",
+        "quick-links:migrate": "bun run ./src/db/accounts/quick-links-migrate.ts"
     },
     "peerDependencies": {
         "typescript": "^5.0.0"

@@ -6,6 +6,7 @@ import express from 'express'
 import { Pool } from 'pg'
 import { createAccountAuth } from '@/lib/account-auth'
 import { createPublicLegalRouter } from '@/lib/legal-router'
+import { createPublicQuickLinksRouter } from '@/lib/quick-links-router'
 import { publicCampusLifeEvents } from '@/queries/campus-life'
 import { setAdminPassword } from '../password'
 import { publicClubEvents } from '../public-events'
@@ -77,7 +78,14 @@ beforeAll(async () => {
             'utf8'
         )
     )
+    await pool.query(
+        await readFile(
+            new URL('../../db/accounts/quick-links.sql', import.meta.url),
+            'utf8'
+        )
+    )
     const app = express()
+    app.use('/api/quick-links', createPublicQuickLinksRouter(pool))
     app.use('/api/legal', createPublicLegalRouter(pool))
     app.use(
         '/api/admin',
@@ -650,5 +658,341 @@ run(
                 )
             ).rows[0].n
         ).toBe(6)
+    }
+)
+
+run(
+    'club editor enforces Ops authorization, setup, conflicts and audit-backed deletion',
+    async () => {
+        const admin = await signIn('maintainer@haw-hamburg.de')
+        expect((await request('/clubs')).status).toBe(401)
+        const setup = await request('/clubs', admin)
+        expect(setup.status).toBe(503)
+        expect((await setup.json()).error).toBe('ClubsSetupRequired')
+        await pool.query(
+            await readFile(
+                new URL('../../db/accounts/clubs.sql', import.meta.url),
+                'utf8'
+            )
+        )
+        const empty = await request('/clubs', admin)
+        expect(empty.status).toBe(200)
+        expect(await empty.json()).toMatchObject({
+            clubs: [],
+            available: true,
+            stale: false,
+            updatedAt: null
+        })
+        await pool.query(
+            "INSERT INTO haw_admin_roles(email,capabilities) VALUES('club-events@haw-hamburg.de',ARRAY['events'])"
+        )
+        const events = await signIn('club-events@haw-hamburg.de')
+        const body = {
+            language: 'de',
+            title: 'Manual club',
+            descriptionHtml: '<p>Welcome</p>',
+            sourceUrl: 'https://example.org',
+            links: [],
+            version: null
+        }
+        expect((await request('/clubs', events, 'POST', body)).status).toBe(403)
+        expect(
+            (
+                await request('/clubs', admin, 'POST', {
+                    ...body,
+                    sourceId: 'heading-new'
+                })
+            ).status
+        ).toBe(400)
+        const create = await request('/clubs', admin, 'POST', body)
+        expect(create.status).toBe(200)
+        const club = await create.json()
+        expect(club.origin).toBe('manual')
+        expect(
+            (
+                await request('/clubs', admin, 'POST', {
+                    ...body,
+                    editorId: club.editorId,
+                    version: 'stale'
+                })
+            ).status
+        ).toBe(409)
+        expect(
+            (
+                await request(
+                    `/clubs/${encodeURIComponent(club.editorId)}`,
+                    events,
+                    'DELETE',
+                    { version: club.version }
+                )
+            ).status
+        ).toBe(403)
+        expect(
+            (
+                await request(
+                    `/clubs/${encodeURIComponent(club.editorId)}`,
+                    admin,
+                    'DELETE',
+                    { version: club.version }
+                )
+            ).status
+        ).toBe(200)
+    }
+)
+
+run(
+    'rich legal JSON preserves versions, safe publication output and legacy literal text',
+    async () => {
+        const admin = await signIn('maintainer@haw-hamburg.de')
+        const publicRead = async () => {
+            const response = await fetch(
+                base.replace('/api/admin', '/api/legal')
+            )
+            expect(response.status).toBe(200)
+            return response.json() as Promise<
+                {
+                    key: string
+                    published: {
+                        body: { de: string; en: string }
+                        bodyHtml?: { de: string; en: string }
+                    } | null
+                }[]
+            >
+        }
+        const current = (await (await request('/legal', admin)).json()).find(
+            (r: { key: string }) => r.key === 'privacy'
+        )
+        const auditBefore = (
+            await pool.query(
+                "SELECT count(*)::int AS n FROM audit_log WHERE entity='haw_legal_documents'"
+            )
+        ).rows[0].n
+        const before = (
+            await pool.query(
+                "SELECT draft,version FROM haw_legal_documents WHERE document_key='privacy'"
+            )
+        ).rows[0]
+        const rejected = await request('/legal/privacy', admin, 'POST', {
+            action: 'save',
+            version: current.version,
+            draft: {
+                mode: 'internal',
+                bodyHtml: {
+                    de: `<p>${'&'.repeat(5000)}</p>`,
+                    en: '<p>English</p>'
+                }
+            }
+        })
+        expect(rejected.status).toBe(400)
+        expect((await rejected.json()).error).toBe('InvalidInput')
+        expect(
+            (
+                await pool.query(
+                    "SELECT draft,version FROM haw_legal_documents WHERE document_key='privacy'"
+                )
+            ).rows[0]
+        ).toEqual(before)
+        expect(
+            (
+                await pool.query(
+                    "SELECT count(*)::int AS n FROM audit_log WHERE entity='haw_legal_documents'"
+                )
+            ).rows[0].n
+        ).toBe(auditBefore)
+        const savedResponse = await request('/legal/privacy', admin, 'POST', {
+            action: 'save',
+            version: current.version,
+            draft: {
+                mode: 'internal',
+                body: { de: 'Spoof', en: 'Spoof' },
+                bodyHtml: {
+                    de: '<h2>Datenschutz</h2><p><strong>Text</strong><img src="https://example.org/a"><script>evil()</script></p>',
+                    en: '<p>Privacy <em>text</em></p>'
+                }
+            }
+        })
+        expect(savedResponse.status).toBe(200)
+        const saved = await savedResponse.json()
+        expect(saved.draft.body.de).toBe('Datenschutz\nText')
+        expect(saved.draft.bodyHtml.de).not.toContain('<img')
+        expect(
+            (
+                await request('/legal/privacy', admin, 'POST', {
+                    action: 'publish',
+                    version: current.version
+                })
+            ).status
+        ).toBe(409)
+        const publishedResponse = await request(
+            '/legal/privacy',
+            admin,
+            'POST',
+            { action: 'publish', version: saved.version }
+        )
+        expect(publishedResponse.status).toBe(200)
+        const published = await publishedResponse.json()
+        expect(
+            (await publicRead()).find((r) => r.key === 'privacy')?.published
+                ?.bodyHtml?.en
+        ).toBe('<p>Privacy <em>text</em></p>')
+        const draftResponse = await request('/legal/privacy', admin, 'POST', {
+            action: 'save',
+            version: published.version,
+            draft: {
+                mode: 'internal',
+                bodyHtml: {
+                    de: '<p>PRIVATE RICH DRAFT</p>',
+                    en: '<p>PRIVATE RICH DRAFT</p>'
+                }
+            }
+        })
+        expect(draftResponse.status).toBe(200)
+        expect(JSON.stringify(await publicRead())).not.toContain(
+            'PRIVATE RICH DRAFT'
+        )
+        await pool.query(
+            'UPDATE haw_legal_documents SET published=$1::jsonb WHERE document_key=$2',
+            [
+                JSON.stringify({
+                    mode: 'internal',
+                    body: { de: 'spoof', en: 'spoof' },
+                    bodyHtml: {
+                        de: '<p>Safe<script>unsafe()</script><img src="https://example.org/a"></p>',
+                        en: '<p>Safe</p>'
+                    },
+                    url: { de: '', en: '' }
+                }),
+                'privacy'
+            ]
+        )
+        const sanitized = (await publicRead()).find(
+            (r) => r.key === 'privacy'
+        )?.published
+        expect(sanitized?.body.de).toBe('Safe')
+        expect(sanitized?.bodyHtml?.de).toBe('<p>Safe</p>')
+        await pool.query(
+            'UPDATE haw_legal_documents SET published=$1::jsonb WHERE document_key=$2',
+            [
+                JSON.stringify({
+                    mode: 'external',
+                    body: { de: 'Hidden', en: 'Hidden' },
+                    bodyHtml: { de: '<p>Hidden</p>', en: '<p>Hidden</p>' },
+                    url: {
+                        de: 'https://example.org/de',
+                        en: 'https://example.org/en'
+                    }
+                }),
+                'privacy'
+            ]
+        )
+        const external = (await publicRead()).find(
+            (r) => r.key === 'privacy'
+        )?.published
+        expect(external?.body).toEqual({ de: '', en: '' })
+        expect(external).not.toHaveProperty('bodyHtml')
+        const latest = await draftResponse.json()
+        const plainSave = await request('/legal/privacy', admin, 'POST', {
+            action: 'save',
+            version: latest.version,
+            draft: {
+                mode: 'internal',
+                body: {
+                    de: 'a < b <strong>literal</strong>',
+                    en: '<p>Literal plaintext</p>'
+                }
+            }
+        })
+        const plainRow = await plainSave.json()
+        expect(
+            (
+                await request('/legal/privacy', admin, 'POST', {
+                    action: 'publish',
+                    version: plainRow.version
+                })
+            ).status
+        ).toBe(200)
+        expect(
+            (await publicRead()).find((r) => r.key === 'privacy')?.published
+                ?.body.de
+        ).toBe('a < b <strong>literal</strong>')
+    }
+)
+
+run(
+    'quick links enforce permissions, conflicts, visibility and transactional audit',
+    async () => {
+        const admin = await signIn('maintainer@haw-hamburg.de')
+        const student = await signIn('quick-student@haw-hamburg.de')
+        const publicUrl = base.replace('/api/admin', '/api/quick-links')
+        expect((await request('/quick-links')).status).toBe(401)
+        expect((await request('/quick-links', student)).status).toBe(403)
+        expect((await (await fetch(publicUrl)).json()).managed).toBe(false)
+        const links = [
+            {
+                key: 'moodle',
+                title: { de: 'Moodle', en: 'Moodle' },
+                url: {
+                    de: 'https://example.org/de',
+                    en: 'https://example.org/en'
+                },
+                icon: 'FolderOpen',
+                visible: true
+            },
+            {
+                key: 'hidden',
+                title: { de: 'Versteckt', en: 'Hidden' },
+                url: {
+                    de: 'https://example.org/de',
+                    en: 'https://example.org/en'
+                },
+                icon: 'Link',
+                visible: false
+            }
+        ]
+        const created = await request('/quick-links', admin, 'POST', {
+            links,
+            version: null
+        })
+        expect(created.status).toBe(200)
+        const saved = await created.json()
+        expect(
+            (await (await fetch(publicUrl)).json()).links.map(
+                (v: { key: string }) => v.key
+            )
+        ).toEqual(['moodle'])
+        expect(
+            (
+                await request('/quick-links', admin, 'POST', {
+                    links: [],
+                    version: null
+                })
+            ).status
+        ).toBe(409)
+        expect(
+            (
+                await request('/quick-links', admin, 'POST', {
+                    links: [{ ...links[0], icon: 'invalid' }],
+                    version: saved.version
+                })
+            ).status
+        ).toBe(400)
+        expect(
+            (await (await request('/quick-links', admin)).json()).version
+        ).toBe(saved.version)
+        const empty = await request('/quick-links', admin, 'POST', {
+            links: [],
+            version: saved.version
+        })
+        expect(empty.status).toBe(200)
+        const publicEmpty = await (await fetch(publicUrl)).json()
+        expect(publicEmpty.managed).toBe(true)
+        expect(publicEmpty.links).toEqual([])
+        expect(
+            (
+                await pool.query(
+                    "SELECT count(*)::int AS n FROM audit_log WHERE entity='haw_quick_links'"
+                )
+            ).rows[0].n
+        ).toBe(2)
     }
 )

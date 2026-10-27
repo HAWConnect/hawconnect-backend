@@ -1,0 +1,132 @@
+[
+    {
+        "key": "primuss",
+        "title": {
+            "de": "myHAW",
+            "en": "myHAW"
+        },
+        "url": {
+            "de": "https://myhaw.haw-hamburg.de/",
+            "en": "https://myhaw.haw-hamburg.de/"
+        },
+        "icon": "GraduationCap",
+        "visible": true
+    },
+    {
+        "key": "moodle",
+        "title": {
+            "de": "Moodle",
+            "en": "Moodle"
+        },
+        "url": {
+            "de": "https://moodle.haw-hamburg.de/?lang=de",
+            "en": "https://moodle.haw-hamburg.de/?lang=en"
+        },
+        "icon": "FolderOpen",
+        "visible": true
+    },
+    {
+        "key": "viamint",
+        "title": {
+            "de": "viaMINT",
+            "en": "viaMINT"
+        },
+        "url": {
+            "de": "https://viamint.de/?lang=de",
+            "en": "https://viamint.de/?lang=en"
+        },
+        "icon": "GraduationCap",
+        "visible": true
+    },
+    {
+        "key": "libraryCatalogue",
+        "title": {
+            "de": "Bibliothekskatalog",
+            "en": "Library catalogue"
+        },
+        "url": {
+            "de": "https://katalog.haw-hamburg.de/",
+            "en": "https://katalog.haw-hamburg.de/"
+        },
+        "icon": "Library",
+        "visible": true
+    },
+    {
+        "key": "onlineServices",
+        "title": {
+            "de": "Online-Services",
+            "en": "Online Services"
+        },
+        "url": {
+            "de": "https://www.haw-hamburg.de/online-services/",
+            "en": "https://www.haw-hamburg.de/en/online-services/"
+        },
+        "icon": "LayoutGrid",
+        "visible": true
+    },
+    {
+        "key": "examCollection",
+        "title": {
+            "de": "Klausurensammlung (IuE)",
+            "en": "Exam collection (IuE)"
+        },
+        "url": {
+            "de": "https://i2e.fsr.haw-hamburg.de/klausurensammlung",
+            "en": "https://i2e.fsr.haw-hamburg.de/klausurensammlung"
+        },
+        "icon": "FileText",
+        "visible": true
+    },
+    {
+        "key": "webmail",
+        "title": {
+            "de": "E-Mail",
+            "en": "E-Mail"
+        },
+        "url": {
+            "de": "https://outlook.office.com/",
+            "en": "https://outlook.office.com/"
+        },
+        "icon": "Mail",
+        "visible": true
+    },
+    {
+        "key": "studVer",
+        "title": {
+            "de": "AStA",
+            "en": "AStA"
+        },
+        "url": {
+            "de": "https://asta.haw-hamburg.de/",
+            "en": "https://asta.haw-hamburg.de/"
+        },
+        "icon": "CircleUser",
+        "visible": true
+    },
+    {
+        "key": "university",
+        "title": {
+            "de": "HAW Website",
+            "en": "HAW Website"
+        },
+        "url": {
+            "de": "https://www.haw-hamburg.de/",
+            "en": "https://www.haw-hamburg.de/en/"
+        },
+        "icon": "Globe",
+        "visible": true
+    },
+    {
+        "key": "marketplace",
+        "title": {
+            "de": "Shop",
+            "en": "Shop"
+        },
+        "url": {
+            "de": "https://shop.haw-hamburg.de/",
+            "en": "https://shop.haw-hamburg.de/"
+        },
+        "icon": "ShoppingCart",
+        "visible": true
+    }
+]

@@ -1,6 +1,6 @@
 import express from 'express'
 import type { AccountAuthService } from '@/lib/account-auth'
-import { hawClubs } from '@/utils/haw-clubs'
+import { managedDirectory } from '@/utils/club-directory'
 import { legalKey } from './legal'
 import { validateOrganizer } from './organizers'
 import {
@@ -46,6 +46,7 @@ export function createAdminRouter(deps: AdminDependencies | null) {
         rates.set(ip, entry)
         next()
     })
+    router.use('/quick-links', express.json({ limit: '2mb' }))
     router.use(express.json({ limit: '128kb' }))
     router.use(async (req, res) => {
         if (!deps) return
@@ -221,6 +222,23 @@ export function createAdminRouter(deps: AdminDependencies | null) {
                     return
                 }
             }
+            if (path === '/quick-links') {
+                requireCapability(grants, 'ops')
+                if (req.method === 'GET') {
+                    res.json(await deps.repository.quickLinks.read())
+                    return
+                }
+                if (req.method === 'POST') {
+                    res.json(
+                        await deps.repository.quickLinks.write(
+                            req.body?.links,
+                            req.body?.version,
+                            actor
+                        )
+                    )
+                    return
+                }
+            }
             if (path === '/legal' && req.method === 'GET') {
                 requireCapability(grants, 'admin')
                 res.json(await deps.repository.legal.list())
@@ -247,10 +265,34 @@ export function createAdminRouter(deps: AdminDependencies | null) {
                 )
                 return
             }
-            if (path === '/clubs' && req.method === 'GET') {
+            if (path === '/clubs') {
                 requireCapability(grants, 'ops')
+                if (req.method === 'GET') {
+                    const language = req.query.language === 'en' ? 'en' : 'de'
+                    const rows = await deps.repository.clubs.list()
+                    res.json(managedDirectory(rows, language))
+                    return
+                }
+                if (req.method === 'POST') {
+                    const input = req.body
+                    res.json(await deps.repository.clubs.write(input, actor))
+                    return
+                }
+            }
+            const clubMatch = /^\/clubs\/([^/]+)$/.exec(path)
+            if (clubMatch && req.method === 'DELETE') {
+                requireCapability(grants, 'ops')
+                if (typeof req.body?.version !== 'string')
+                    throw Error('InvalidInput')
                 res.json(
-                    await hawClubs(req.query.language === 'en' ? 'en' : 'de')
+                    await deps.repository.clubs.write(
+                        {
+                            editorId: decodeURIComponent(clubMatch[1]),
+                            version: req.body.version
+                        },
+                        actor,
+                        true
+                    )
                 )
                 return
             }
@@ -362,7 +404,12 @@ export function createAdminRouter(deps: AdminDependencies | null) {
                           ? 400
                           : 503
             res.status(status).json({
-                error: status === 503 ? 'AdminUnavailable' : code
+                error:
+                    code === 'ClubsSetupRequired'
+                        ? code
+                        : status === 503
+                          ? 'AdminUnavailable'
+                          : code
             })
         }
     })

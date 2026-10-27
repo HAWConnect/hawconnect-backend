@@ -1,10 +1,13 @@
+import { load } from 'cheerio'
 import type { Pool } from 'pg'
+import sanitizeHtml from 'sanitize-html'
 
 export const legalKeys = ['privacy', 'imprint'] as const
 export type LegalKey = (typeof legalKeys)[number]
 export interface LegalDraft {
     mode: 'internal' | 'external'
     body: { de: string; en: string }
+    bodyHtml?: { de: string; en: string } | null
     url: { de: string; en: string }
 }
 export function legalKey(value: string): LegalKey {
@@ -22,7 +25,7 @@ export function validateLegalDraft(value: unknown): LegalDraft {
     const input = value as Record<string, unknown>
     if (input.mode !== 'internal' && input.mode !== 'external')
         throw Error('InvalidInput')
-    const pair = (value: unknown, max: number) => {
+    const pair = (value: unknown, max: number, trim = true) => {
         if (
             value != null &&
             (typeof value !== 'object' || Array.isArray(value))
@@ -33,7 +36,7 @@ export function validateLegalDraft(value: unknown): LegalDraft {
             if (v == null) return ''
             if (typeof v !== 'string' || v.length > max)
                 throw Error('InvalidInput')
-            return v.trim()
+            return trim ? v.trim() : v
         }
         return { de: text(v.de), en: text(v.en) }
     }
@@ -48,21 +51,103 @@ export function validateLegalDraft(value: unknown): LegalDraft {
                 throw Error('InvalidInput')
             }
         }
-    return { mode: input.mode, body: pair(input.body, 20000), url }
+    if (input.bodyHtml != null) {
+        const raw = pair(input.bodyHtml, 20000)
+        const sanitize = (html: string) =>
+            sanitizeHtml(html, {
+                allowedTags: [
+                    'p',
+                    'br',
+                    'strong',
+                    'b',
+                    'em',
+                    'i',
+                    'h2',
+                    'h3',
+                    'ul',
+                    'ol',
+                    'li',
+                    'blockquote',
+                    'a'
+                ],
+                allowedAttributes: { a: ['href'] },
+                allowedSchemes: ['https', 'mailto'],
+                allowProtocolRelative: false,
+                transformTags: {
+                    a: (tagName, attribs) => {
+                        if (attribs.href) {
+                            try {
+                                const u = new URL(attribs.href)
+                                if (
+                                    !['https:', 'mailto:'].includes(
+                                        u.protocol
+                                    ) ||
+                                    u.username ||
+                                    u.password
+                                )
+                                    throw Error()
+                                attribs.href = u.href
+                            } catch {
+                                delete attribs.href
+                            }
+                        }
+                        return { tagName, attribs }
+                    }
+                }
+            })
+        const bodyHtml = { de: sanitize(raw.de), en: sanitize(raw.en) }
+        const plain = (html: string) => {
+            const $ = load(html)
+            $('br').replaceWith('\n')
+            $('p,h2,h3,li,blockquote').append('\n')
+            return $.text().trim()
+        }
+        const body = { de: plain(bodyHtml.de), en: plain(bodyHtml.en) }
+        if (
+            [...Object.values(bodyHtml), ...Object.values(body)].some(
+                (text) => text.length > 20000
+            )
+        )
+            throw Error('InvalidInput')
+        return {
+            mode: input.mode,
+            body,
+            bodyHtml,
+            url
+        }
+    }
+    return {
+        mode: input.mode,
+        body: pair(input.body, 20000, false),
+        ...(input.bodyHtml === null ? { bodyHtml: null } : {}),
+        url
+    }
 }
 export function validateLegalPublication(value: unknown): LegalDraft {
     const draft = validateLegalDraft(value)
     const fields = draft.mode === 'internal' ? draft.body : draft.url
-    if (!fields.de || !fields.en) throw Error('InvalidInput')
+    if (
+        !fields.de.replace(
+            /[\s\u200b-\u200f\u202a-\u202e\u2060-\u206f\ufeff]/g,
+            ''
+        ) ||
+        !fields.en.replace(
+            /[\s\u200b-\u200f\u202a-\u202e\u2060-\u206f\ufeff]/g,
+            ''
+        )
+    )
+        throw Error('InvalidInput')
     return draft.mode === 'internal'
         ? { ...draft, url: { de: '', en: '' } }
-        : { ...draft, body: { de: '', en: '' } }
+        : { mode: draft.mode, body: { de: '', en: '' }, url: draft.url }
 }
 function mapRow(key: LegalKey, row?: Record<string, unknown>) {
     return {
         key,
-        draft: (row?.draft ?? emptyLegalDraft()) as LegalDraft,
-        published: (row?.published ?? null) as LegalDraft | null,
+        draft: validateLegalDraft(row?.draft ?? emptyLegalDraft()),
+        published: row?.published
+            ? validateLegalPublication(row.published)
+            : null,
         version: (row?.version ?? null) as string | null,
         publishedAt: row?.published_at
             ? new Date(String(row.published_at)).toISOString()
@@ -91,7 +176,9 @@ export function createLegalRepository(pool: Pool) {
                 return {
                     key,
                     managed: !!row,
-                    published: row?.published ?? null,
+                    published: row?.published
+                        ? validateLegalPublication(row.published)
+                        : null,
                     publishedAt: row?.published_at
                         ? new Date(row.published_at).toISOString()
                         : null

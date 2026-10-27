@@ -307,7 +307,9 @@ type FoodResponse {
 }
 
 type HawClub {
+  contentLanguage: String
   description: String!
+  descriptionHtml: String
   id: ID!
   links: [HawClubLink!]!
   sourceUrl: String!

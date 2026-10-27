@@ -1,0 +1,347 @@
+{
+    "importKey": "existing-clubs-2026-10-24",
+    "capturedAt": "2026-10-24T07:31:31.218Z",
+    "note": "One-time copy of the existing local public club directory. No network fetching; maintain entries in Dash after import. Language pairs were explicitly reviewed.",
+    "clubs": [
+        {
+            "editorId": "manual:initial:bunte-haende",
+            "legacyIds": {
+                "de": "heading-0-c9510",
+                "en": "heading-0-c9971"
+            },
+            "content": {
+                "de": {
+                    "title": "Bunte Hände",
+                    "descriptionHtml": "<p>Die Initiative &quot;Bunte Hände&quot; der Arbeitsstelle Migration der HAW Hamburg bietet Unterstützung zur Integration an Hochschulen durch Sprach-Tandems, eine Schreibwerkstatt, ein sozial-integratives Freizeitprogramm und ein multilinguales Peer-to-Peer-Programm zur Steigerung des Studienerfolgs von Studierenden mit Fluchthintergrund sowie internationalen Studierenden.</p><p>Seit dem Sommersemester 2019 können sie zudem fachliche Inhalte in den Programmiersprachen C, C++, Java und Ruby mehrsprachig (arabisch, deutsch, englisch) vertiefen. Außerdem berät „Bunte Hände“ begabte Flüchtlinge an Hamburger Oberschulen zu Studienmöglichkeiten in Deutschland.</p><p>Vorstellungsvideo Facebook-Seite der Initiative &quot;Bunte Hände&quot;</p>",
+                    "sourceUrl": "https://www.haw-hamburg.de/studium/campusleben/studentische-projekte/#heading-0-c9510",
+                    "links": [
+                        {
+                            "title": "Die Initiative \"Bunte Hände\"",
+                            "url": "https://www.haw-hamburg.de/international/gefluechtete/bunte-haende-fuer-mehr-vielfalt/"
+                        },
+                        {
+                            "title": "Vorstellungsvideo",
+                            "url": "https://www.youtube.com/watch?v=A0weI5-KdUE"
+                        },
+                        {
+                            "title": "Facebook-Seite der Initiative \"Bunte Hände\"",
+                            "url": "https://www.facebook.com/haw.buntehaende/"
+                        }
+                    ]
+                },
+                "en": {
+                    "title": "Bunte Hände (Colourful Hands)",
+                    "descriptionHtml": "<p>The Bunte Hände (Colourful Hands) project, run by HAW Hamburg&#x27;s Centre for Migration Research and Integration Practice, provides assistance to students with a refugee background and to international students, with the aim of helping them succeed at their studies. It offers language tandems, a writing workshop, a selection of socially integrative leisure activities and a multilingual peer-to-peer programme.</p><p>Since the 2019 summer semester, students have also been able to expand their knowledge of the programming languages C, C++, Java and Ruby in various languages (Arabic, German, English). Bunte Hände also advises gifted refugees at Hamburg&#x27;s high schools about study opportunities.</p><p>More information Bunte Hände Facebook page</p>",
+                    "sourceUrl": "https://www.haw-hamburg.de/en/study/campus-life/student-projects/#heading-0-c9971",
+                    "links": [
+                        {
+                            "title": "Bunte Hände (Colourful Hands) project",
+                            "url": "https://www.haw-hamburg.de/en/international/students-with-refugee-experience/bunte-haende-for-more-diversity/"
+                        },
+                        {
+                            "title": "Bunte Hände Facebook page",
+                            "url": "https://www.facebook.com/haw.buntehaende/"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "editorId": "manual:initial:webuddy",
+            "legacyIds": {
+                "de": "heading-1-c9510",
+                "en": "heading-1-c9971"
+            },
+            "content": {
+                "de": {
+                    "title": "WeBuddy-Programm",
+                    "descriptionHtml": "<p>Mit dem weBuddy-Programm begrüßt die HAW Hamburg ihre neuen internationalen Studierenden und Gaststudierenden und hilft ihnen beim Start ins Studium. Erfahrene Studierende der HAW Hamburg – sogenannte &quot;Buddies&quot; – unterstützen die Erstsemester in den schwierigen ersten Tagen in der Stadt und an der Hochschule und sorgen so für gelebte Gastfreundschaft. In den Tagen vor Semesterbeginn organisiert das International Office eine Welcome Week mit Veranstaltungen und einem Welcome Dinner. Während des Semesters gibt es außerdem regelmäßige Veranstaltungen wie beispielsweise Ausflüge, Bowlingnachmittage oder Kochabende. Wir möchten, dass Sie sich wohlfühlen und viele neue internationale Freundschaften entstehen.</p><p>weBuddy-Programm</p><p>Anmeldung</p>",
+                    "sourceUrl": "https://www.haw-hamburg.de/studium/campusleben/studentische-projekte/#heading-1-c9510",
+                    "links": [
+                        {
+                            "title": "weBuddy-Programm",
+                            "url": "https://www.haw-hamburg.de/webuddy/"
+                        },
+                        {
+                            "title": "Anmeldung",
+                            "url": "https://www.haw-hamburg.de/webuddy/anmeldung-zum-webuddy-programm/"
+                        }
+                    ]
+                },
+                "en": {
+                    "title": "weBuddy Programme",
+                    "descriptionHtml": "<p>With the weBuddy Programme, HAW Hamburg welcomes its new international and visiting students and helps them out as they start their studies. Experienced HAW Hamburg students – so-called &#x27;buddies&#x27; – support the first-semester students during their challenging early days in the city and at the university, making sure they experience a hospitable welcome. In the days directly before the semester starts, the International Office organises a Welcome Week with various events and a welcome dinner. There are also regular events throughout the semester, such as outings, bowling afternoons or cooking nights. We want you to feel comfortable here and for lots of new international friendships to develop.</p><p>weBuddy Programme</p><p>Registration</p>",
+                    "sourceUrl": "https://www.haw-hamburg.de/en/study/campus-life/student-projects/#heading-1-c9971",
+                    "links": [
+                        {
+                            "title": "weBuddy Programme",
+                            "url": "https://www.haw-hamburg.de/en/webuddy/"
+                        },
+                        {
+                            "title": "Registration",
+                            "url": "https://www.haw-hamburg.de/en/webuddy/register-for-the-webuddy-programme/"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "editorId": "manual:initial:hawks-racing",
+            "legacyIds": {
+                "de": "heading-2-c9510",
+                "en": "heading-2-c9971"
+            },
+            "content": {
+                "de": {
+                    "title": "HAWKS Racing e.V.",
+                    "descriptionHtml": "<p>HAWKS Racing e.V. ist das Formula Student Team der HAW Hamburg. Das Team entwickelt und fertigt Rennfahrzeuge, mit denen sie an den Events der Formula Student teilnehmen - dem größten internationalen Konstruktionswettbewerb für Studenten.</p><p>Durch praxisnahes Arbeiten ergänzt HAWKS Racing das akademische Studium an der Hochschule. Werden Sie Fan, Partner oder Mitglied. Be part of the passion – be HAWKS!</p><p>Webseite des HAWKS Racing e.V.</p>",
+                    "sourceUrl": "https://www.haw-hamburg.de/studium/campusleben/studentische-projekte/#heading-2-c9510",
+                    "links": [
+                        {
+                            "title": "Webseite des HAWKS Racing e.V.",
+                            "url": "https://www.hawksracing.de/"
+                        }
+                    ]
+                },
+                "en": {
+                    "title": "HAWKS Racing e.V.",
+                    "descriptionHtml": "<p>HAWKS Racing e.V. is the HAW Hamburg&#x27;s Formula Student team. The team develops and builds racing cars, entering them in the events of the Formula Student – the largest international car-construction competition for students.</p><p>Through the practical work, the HAWKS Racing club supplements students&#x27; academic studies at the university. Become a fan, partner or member. Be part of the passion – be HAWKS!</p><p>HAWKS Racing website (in German only)</p>",
+                    "sourceUrl": "https://www.haw-hamburg.de/en/study/campus-life/student-projects/#heading-2-c9971",
+                    "links": [
+                        {
+                            "title": "HAWKS Racing website (in German only)",
+                            "url": "https://www.hawksracing.de/"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "editorId": "manual:initial:neues-fliegen",
+            "legacyIds": {
+                "de": "heading-3-c9510",
+                "en": "heading-3-c9971"
+            },
+            "content": {
+                "de": {
+                    "title": "Neues Fliegen e.V.",
+                    "descriptionHtml": "<p>Neues Fliegen e.V. ist ein studentischer Verein, der im Februar 2014 von Studierenden des Departments Fahrzeugtechnik und Flugzeugbau gegründet wurde.</p><p>Webseite des Vereins Neues Fliegen</p>",
+                    "sourceUrl": "https://www.haw-hamburg.de/studium/campusleben/studentische-projekte/#heading-3-c9510",
+                    "links": []
+                },
+                "en": {
+                    "title": "Neues Fliegen (New Flight) e.V.",
+                    "descriptionHtml": "<p>New Flight is a student club that was founded in February 2014 by the Department of Automotive and Aeronautical Engineering.</p><p>New Flight website</p>",
+                    "sourceUrl": "https://www.haw-hamburg.de/en/study/campus-life/student-projects/#heading-3-c9971",
+                    "links": []
+                }
+            }
+        },
+        {
+            "editorId": "manual:initial:samt-magazin",
+            "legacyIds": {
+                "de": "heading-4-c9510",
+                "en": "heading-4-c9971"
+            },
+            "content": {
+                "de": {
+                    "title": "Samt-Magazin",
+                    "descriptionHtml": "<p>Das Samt-Magazin ist ein von Studierenden initiiertes Magazin. Es zeigt Semester- und Abschlussarbeiten aus den Bereichen Illustration, Modedesign, Textildesign, Kostümdesign und Kommunikationsdesign der Fakultät Design an der HAW Hamburg. Der Name ‹Samt› leitet sich ab von dem Wort ‹gesamt› und versucht, einen ganzheitlichen Überblick über die Projekte der Fakultät Design zu schaffen.</p><p>Zum Samt-Magazin https://www.instagram.com/samt_magazin/</p>",
+                    "sourceUrl": "https://www.haw-hamburg.de/studium/campusleben/studentische-projekte/#heading-4-c9510",
+                    "links": [
+                        {
+                            "title": "Zum Samt-Magazin",
+                            "url": "https://www.samt-magazin.de/"
+                        },
+                        {
+                            "title": "https://www.instagram.com/samt_magazin/",
+                            "url": "https://www.instagram.com/samt_magazin/"
+                        }
+                    ]
+                },
+                "en": {
+                    "title": "Samt-Magazin",
+                    "descriptionHtml": "<p>Samt-Magazin is a student-initiated publication. It shows semester and final projects from the fields of illustration, fashion design, textile design, costume design, and communication design at the Faculty of Design at HAW Hamburg. The name “Samt” is derived from the word “gesamt” (total) and aims to provide a comprehensive overview of the projects undertaken by the Faculty of Design.</p><p>Homepage Samt-Magazin https://www.instagram.com/samt_magazin/</p>",
+                    "sourceUrl": "https://www.haw-hamburg.de/en/study/campus-life/student-projects/#heading-4-c9971",
+                    "links": [
+                        {
+                            "title": "Homepage Samt-Magazin",
+                            "url": "https://www.samt-magazin.de/"
+                        },
+                        {
+                            "title": "https://www.instagram.com/samt_magazin/",
+                            "url": "https://www.instagram.com/samt_magazin/"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "editorId": "manual:initial:robotter",
+            "legacyIds": {
+                "de": "heading-5-c9510",
+                "en": "heading-5-c9971"
+            },
+            "content": {
+                "de": {
+                    "title": "RobOtter Club Hamburg",
+                    "descriptionHtml": "<p>Der RobOtter Club Hamburg (RCHH) ist ein Projekt für alle roboterinteressierten Studierenden. Der Club wurde im Rahmen der studentischen Förderprojekte 2011 an der HAW Hamburg von Cagri Erdogan und Prof. Dr. Frischgesell ins Leben gerufen. Der Club nimmt regelmäßig an der Eurobot und an anderen internationalen Wettbewerben für autonome Roboter teil.</p><p>Facebook-Seite des RobOtter-Clubs Hamburg</p>",
+                    "sourceUrl": "https://www.haw-hamburg.de/studium/campusleben/studentische-projekte/#heading-5-c9510",
+                    "links": [
+                        {
+                            "title": "RobOtter Club Hamburg (RCHH)",
+                            "url": "https://www.haw-hamburg.de/hochschule/technik-und-informatik/departments/maschinenbau-und-produktion/aktuelles/veranstaltungen/roboterwettbewerbe/robotter-club/"
+                        },
+                        {
+                            "title": "Facebook-Seite des RobOtter-Clubs Hamburg",
+                            "url": "https://www.facebook.com/haw.rchh/"
+                        }
+                    ]
+                },
+                "en": {
+                    "title": "RobOtter Club Hamburg",
+                    "descriptionHtml": "<p>The Hamburg RobOtter Club (RCHH) is a project for all students interested in robots. The club was started at HAW Hamburg by Cagri Erdogan and Prof. Dr. Frischgesell as part of the 2011 student funding projects. It regularly takes part in Eurobot and other international robotics contests.</p><p>Hamburg RobOtter Club Facebook page</p>",
+                    "sourceUrl": "https://www.haw-hamburg.de/en/study/campus-life/student-projects/#heading-5-c9971",
+                    "links": [
+                        {
+                            "title": "Hamburg RobOtter Club (RCHH)",
+                            "url": "https://www.haw-hamburg.de/hochschule/technik-und-informatik/departments/maschinenbau-und-produktion/aktuelles/veranstaltungen/roboterwettbewerbe/robotter-club/"
+                        },
+                        {
+                            "title": "Hamburg RobOtter Club Facebook page",
+                            "url": "https://www.facebook.com/haw.rchh/"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "editorId": "manual:initial:theater-ag",
+            "legacyIds": {
+                "de": "heading-6-c9510",
+                "en": "heading-6-c9971"
+            },
+            "content": {
+                "de": {
+                    "title": "Theater AG",
+                    "descriptionHtml": "<p>Theater ist ein Ereignis, bei dem sich Menschen versammeln, um Menschen zu sehen, die Menschen spielen, die miteinander und gegeneinander handeln, ein ästhetisches Bewusstseinsorgan der Gesellschaft.</p><p>Die Theater AG hat bisher Varianten des Improvisationstheaters (u.a. aus dem &quot;Theater der Befreiung&quot; und „Playback-Theater“) ausprobiert und möchte nun gemeinsam ein Stück entwickeln. Wir suchen neue Mutige. Gewitzte. Einfühlsame. Verspielte. Die intensiv leben wollen. Auf der Bühne reflektieren. Teil einer intimen Gruppe sein. Die Isolation im Studium überwinden. Wir spielen harmlos und gefährlich, mal lethargisch, mal übermütig. Wir sind keine Profis. Wir spielen einfach.</p><p>Kontakt: theater-ag (at) haw-hamburg (dot) de (alternativ: theater.haw (at) gmx (dot) de)</p>",
+                    "sourceUrl": "https://www.haw-hamburg.de/studium/campusleben/studentische-projekte/#heading-6-c9510",
+                    "links": [
+                        {
+                            "title": "theater-ag (at) haw-hamburg (dot) de",
+                            "url": "https://www.haw-hamburg.de/studium/campusleben/studentische-projekte/#"
+                        }
+                    ]
+                },
+                "en": {
+                    "title": "Theater AG (Theatre Club)",
+                    "descriptionHtml": "<p>Theatre is an experience that brings people together to watch people who portray people working with and against one another – an aesthetic awareness-raising element in society.</p><p>So far, the Theatre Club has tried out different types of improvisational theatre (including theatre of the oppressed and playback theatre). It would now like to try to jointly develop a theatre piece. We&#x27;re looking for new members who are courageous, witty, compassionate and playful. Who want to live with intensity, be reflective on stage, be part of an intimate group, and overcome the isolation of university studies. Our acting is harmless and dangerous, sometimes lethargic, sometimes boisterous. We aren&#x27;t professionals; we just act.</p><p>Contact information: theater-ag (at) haw-hamburg (dot) de (or: theater.haw (at) gmx (dot) de)</p>",
+                    "sourceUrl": "https://www.haw-hamburg.de/en/study/campus-life/student-projects/#heading-6-c9971",
+                    "links": [
+                        {
+                            "title": "theater-ag (at) haw-hamburg (dot) de",
+                            "url": "https://www.haw-hamburg.de/studium/campusleben/studentische-projekte/#"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "editorId": "manual:initial:ag-antifa",
+            "legacyIds": {
+                "de": "heading-7-c9510",
+                "en": "heading-7-c9971"
+            },
+            "content": {
+                "de": {
+                    "title": "AG Antifa",
+                    "descriptionHtml": "<p>Die AG Antifa ist eine Gruppe Studierender aus verschiedenen Studiengängen der HAW. Wir haben uns gegründet, um die Geschichte der HAW und ihrer Umgebung aufzuarbeiten.</p><p>Im Faschismus spielten Hochschulen und ihre Vorgängerorganisationen oftmals eine unrühmliche Rolle, indem sie sich bereits im vorauseilenden Gehorsam gleichschalteten. Das galt jedoch nicht für alle. Es gab auch Widerstand, von dem wir für heute lernen können. Nie wieder darf Wissenschaft sich an Krieg, menschenverachtenden Verbrechen und deren Legitimation beteiligen. Mit Veranstaltungen, Gedenkkundgebungen und Lesungen wollen wir den historischen Widerstand würdigen und uns für eine demokratische Gesellschaft heute stark machen.</p><p>Mitstreiter*innen sind herzlich willkommen.</p><p>Kontakt: antifa-haw (at) outlook (dot) de | Instagram: @antifa_hawhamburg | https://www.instagram.com/antifa_hawhamburg/</p>",
+                    "sourceUrl": "https://www.haw-hamburg.de/studium/campusleben/studentische-projekte/#heading-7-c9510",
+                    "links": [
+                        {
+                            "title": "antifa-haw (at) outlook (dot) de",
+                            "url": "https://www.haw-hamburg.de/studium/campusleben/studentische-projekte/#"
+                        },
+                        {
+                            "title": "https://www.instagram.com/antifa_hawhamburg/",
+                            "url": "https://www.instagram.com/antifa_hawhamburg/"
+                        }
+                    ]
+                },
+                "en": {
+                    "title": "AG AntiFa (Anti-Fascism Working Group)",
+                    "descriptionHtml": "<p>The Anti-Fascism Working Group is a group of students from various degree courses at HAW Hamburg. We founded the group to work through HAW Hamburg&#x27;s history.</p><p>During the fascist period, universities and their predecessor organisations often played a dishonourable role by hurriedly adhering to the regime. This was not the case for everyone, however. There was also resistance, which we can learn from today. Academia can never again be allowed to take part in war, crimes that violate human rights, or their legitimation. Through events, memorials and readings we aim to honour the historical resistance and advocate for a democratic society.</p><p>Those interested in working with us are very welcome.</p><p>Contact information: antifa-haw (at) outlook (dot) de | Instagram: @antifa_haw</p>",
+                    "sourceUrl": "https://www.haw-hamburg.de/en/study/campus-life/student-projects/#heading-7-c9971",
+                    "links": [
+                        {
+                            "title": "antifa-haw (at) outlook (dot) de",
+                            "url": "https://www.haw-hamburg.de/en/study/campus-life/student-projects/#"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "editorId": "manual:initial:kontrabar",
+            "legacyIds": {
+                "de": "heading-8-c9510",
+                "en": "heading-8-c9971"
+            },
+            "content": {
+                "de": {
+                    "title": "Kontrabar AG",
+                    "descriptionHtml": "<p>Die KontraBar ist ein von Studierenden erkämpfter und selbstverwalteter Raum, von denen es an der HAW leider viel zu wenige gibt. 2013 führte der Mangel an studentisch gestalteten Räumen dazu, dass in Form eines kleinen Raves der Musikraum im EG besetzt wurde. Der bis dahin für Studierende bestehende war weder groß genug noch barrierefrei. In Verhandlungen mit Departmentleitung und Dekan konnte dann ein Alternativraum erkämpft werden.</p><p>Die KontraBar in Raum 0.15 wurde eröffnet und wird seitdem munter belebt und ständig weiterentwickelt. Durch die Etablierung der KontraBar erschufen wir einen Ort für politischen, gesellschaftlichen und fachlichen Austausch und Vernetzung: Derzeit finden z.B. FSR-Sitzungen, AG Treffen, Lesekreise, Filmabende,Bannermalaktionen, Barabende etc. statt. Der Raum soll von allen Interessierten genutzt werden können und ist auch während der Seminarzeiten offen. Alle* sind herzlich eingeladen sich an der Gestaltung zu beteiligen! Kontakt: kontrabar (at) gmx (dot) de | Instagram: @kontrabarhaw</p>",
+                    "sourceUrl": "https://www.haw-hamburg.de/studium/campusleben/studentische-projekte/#heading-8-c9510",
+                    "links": [
+                        {
+                            "title": "kontrabar (at) gmx (dot) de",
+                            "url": "https://www.haw-hamburg.de/studium/campusleben/studentische-projekte/#"
+                        }
+                    ]
+                },
+                "en": {
+                    "title": "KontraBar AG",
+                    "descriptionHtml": "<p>The KontraBar is a hard-won student-run space. Unfortunately, there are far too few such rooms at HAW Hamburg. In 2013, the shortage of student-run spaces led to the occupation of the music room, as the previous student space was neither large enough nor accessible. Through discussions with the department management and the dean, students were able to obtain an alternative room.</p><p>The KontraBar was opened in room 0.15 and has since been a lively location that is continually being developed. Through the creation of the KontraBar, we have created a space for political, societal and subject-related exchange and networking: student council meetings, club meetings, reading groups, film evenings, banner-painting actions and bar evenings are currently held there. The room can be used by anyone who is interested and is also open during seminar periods. Everyone is cordially invited to participate in organising and shaping how the space is used! Contact information: kontrabar (at) gmx (dot) de | Instagram: @kontrabarhaw</p>",
+                    "sourceUrl": "https://www.haw-hamburg.de/en/study/campus-life/student-projects/#heading-8-c9971",
+                    "links": [
+                        {
+                            "title": "kontrabar (at) gmx (dot) de",
+                            "url": "https://www.haw-hamburg.de/studium/campusleben/studentische-projekte/#"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "editorId": "manual:initial:ak-friedenswissenschaft",
+            "legacyIds": {
+                "de": "heading-9-c9510",
+                "en": "heading-9-c9971"
+            },
+            "content": {
+                "de": {
+                    "title": "AK Friedenswissenschaft",
+                    "descriptionHtml": "<p>Der AK Friedenswissenschaft ist eine mitglieder- und fakultätsübergreifende Gruppe, die sich für einen Frieden einsetzt, der mehr ist als bloß die Abwesenheit von Krieg. Denn dafür hat die HAW mit ihren vielen verschiedenen Studiengängen großes Potential, welches noch wachsen kann, wenn wir fächerübergreifend und interdisziplinär zusammenarbeiten. Internationale Wissenschaftskooperationen verbinden Länder und Menschen, tragen zu Völkerverständigung bei und wirken Feindbildern entgegen. Sie sollten mit allen Ländern ausgebaut werden. Denn wir brauchen alle, um an der Lösung der großen Menschheitsfragen zu arbeiten, wie sie in den 17 für eine nachhaltige Entwicklung (SDGs) der UN gefasst sind: bspw. kein Hunger, keine Armut, eine Überwindung von Analphabetismus, weltweite gute Gesundheitsversorgung und eine reale Beantwortung der Klimafrage.</p><p>Kontakt: post (at) ak-friedenswissenschaft (dot) de</p>",
+                    "sourceUrl": "https://www.haw-hamburg.de/studium/campusleben/studentische-projekte/#heading-9-c9510",
+                    "links": [
+                        {
+                            "title": "post (at) ak-friedenswissenschaft (dot) de",
+                            "url": "https://www.haw-hamburg.de/studium/campusleben/studentische-projekte/#"
+                        }
+                    ]
+                },
+                "en": {
+                    "title": "AK Friedenswissenschaft (Peace Studies Working Group)",
+                    "descriptionHtml": "<p>The Peace Studies Working Group is a cross-faculty group working for a peace that is more than just the absence of war. Because with its various degree courses, the HAW Hamburg has significant potential in this regard, and this potential can be increased even further if we work together across subjects and disciplines.</p><p>International academic collaborations connect countries and people, contribute to international understanding and help counter stereotypes. They should be expanded to include all countries. We need everyone to work on solving the big issues facing humanity, as outlined in the UN&#x27;s 17 SDGs – for example, ending hunger, ending poverty, overcoming illiteracy, access to good healthcare worldwide, and real solutions to address climate change.</p><p>Contact information: post (at) ak-friedenswissenschaft (dot) de</p>",
+                    "sourceUrl": "https://www.haw-hamburg.de/en/study/campus-life/student-projects/#heading-9-c9971",
+                    "links": [
+                        {
+                            "title": "post (at) ak-friedenswissenschaft (dot) de",
+                            "url": "https://www.haw-hamburg.de/studium/campusleben/studentische-projekte/#"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
